@@ -191,6 +191,14 @@ function decQty(idx){
 }
 
 function addToCart(menuName){
+
+  const user = localStorage.getItem('user');
+  if(!user) {
+    alert('กรุณาเข้าสู่ระบบก่อนเพิ่มรายการอาหาร');
+    location.href = 'login.html'; // ดีดไปหน้า Login
+    return; // จบการทำงาน ไม่เพิ่มของลงตะกร้า
+  }
+
   let tempIndex = Object.keys(menus[shop]).indexOf(menuName); 
 
   const qtyEl = document.getElementById(`qty-${tempIndex}`);
