@@ -196,8 +196,8 @@ function addToCart(menuName){
   const user = localStorage.getItem('user');
   if(!user) {
     alert('กรุณาเข้าสู่ระบบก่อนเพิ่มรายการอาหาร');
-    location.href = 'login.html'; // ดีดไปหน้า Login
-    return; // จบการทำงาน ไม่เพิ่มของลงตะกร้า
+    location.href = 'login.html';
+    return;
   }
 
   let tempIndex = Object.keys(menus[shop]).indexOf(menuName); 
@@ -206,6 +206,7 @@ function addToCart(menuName){
   const qty = parseInt(qtyEl.innerText);
   const item = menus[shop][menuName];
 
+  // เช็คสถานะติ๊กถูก
   const specialChecked = item.canSpecial
     ? document.getElementById(`special-${tempIndex}`).checked
     : false;
@@ -215,20 +216,33 @@ function addToCart(menuName){
     return;
   }
 
-  const itemIndex = cart.findIndex(it => it.menuName === menuName && it.shop === shop);
+  // ---------------------------------------------------------
+  // ✅ จุดที่แก้ไข: เพิ่มเงื่อนไข && it.special === specialChecked
+  // เพื่อเช็คว่า ต้องเป็นเมนูเดิม และ สถานะพิเศษต้องเหมือนกันด้วย ถึงจะรวมกอง
+  // ---------------------------------------------------------
+  const itemIndex = cart.findIndex(it => 
+      it.menuName === menuName && 
+      it.shop === shop && 
+      it.special === specialChecked
+  );
 
   if(itemIndex > -1){
+    // ถ้าเจอ (เช่น มีกะเพราพิเศษอยู่แล้ว และสั่งกะเพราพิเศษเพิ่ม) -> บวกจำนวนเพิ่ม
     cart[itemIndex].qty += qty;
-    // อัปเดตสถานะพิเศษตามครั้งล่าสุด
-    if(specialChecked) cart[itemIndex].special = true;
   } else {
-    cart.push({menuName: menuName, shop: shop, qty: qty, special: specialChecked});
+    // ถ้าไม่เจอ (เช่น มีกะเพราธรรมดา แต่อันนี้สั่งกะเพราพิเศษ) -> เพิ่มแถวใหม่
+    cart.push({
+        menuName: menuName, 
+        shop: shop, 
+        qty: qty, 
+        special: specialChecked
+    });
   }
+  // ---------------------------------------------------------
 
-  // แก้ไข: รีเซ็ตเป็น 1 (ไม่ใช่ 0) และเคลียร์ช่องติ๊กพิเศษ
+  // รีเซ็ตค่าหน้าจอ
   qtyEl.innerText = 1;
   if(item.canSpecial) document.getElementById(`special-${tempIndex}`).checked = false;
-
 
   saveAndRender();
 }
