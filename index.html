@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>เลือกร้านอาหาร - EasyMeal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">EasyMeal</div>
+
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" class="top-search-input" 
+               placeholder="ค้นหาเมนู..." onkeyup="doSearch()">
+        <div id="searchResults" class="search-results-dropdown"></div>
+    </div>
+
+    <div class="top-actions">
+      <span id="userLabel" class="user-label hidden"></span>
+      <button id="loginBtn" class="btn small" onclick="location.href='login.html'">เข้าสู่ระบบ</button>
+      <button id="logoutBtn" class="btn small hidden" onclick="doLogout()">ออกจากระบบ</button>
+    </div>
+</header>
+
+  <main class="container">
+    
+    <div class="adBanner">
+      <button class="adBtn adPrev" onclick="prevSlide()">❮</button>
+      <div class="adSlides" id="adSlides"></div>
+      <button class="adBtn adNext" onclick="nextSlide()">❯</button>
+    </div>
+
+    
+
+    <h2>Food Center ในมหาวิทยาลัยศรีปทุม</h2>
+    <div class="shopGrid">
+      <div class="shopCard" onclick="openShop('somtum')">
+        <div class="imgBox"><img src="img/หน้า Menu/ส้มตำ.webp" class="shopImg"></div>
+        <h3>ร้านส้มตำ</h3>
+      </div>
+      <div class="shopCard" onclick="openShop('tamsang')">
+        <div class="imgBox"><img src="img/หน้า Menu/ตามสั่ง.jpg" class="shopImg"></div>
+        <h3>ร้านตามสั่ง</h3>
+      </div>
+      <div class="shopCard" onclick="openShop('noodle')">
+        <div class="imgBox"><img src="img/หน้า Menu/ก๋วยเตี๊ยว.webp" class="shopImg"></div>
+        <h3>ร้านก๋วยเตี๋ยว</h3>
+      </div>
+      <div class="shopCard" onclick="openShop('friedchicken')">
+        <div class="imgBox"><img src="img/หน้า Menu/ไก่ทอด.jpg" class="shopImg"></div>
+        <h3>ร้านไก่ทอด</h3>
+      </div>
+      <div class="shopCard" onclick="openShop('dessert')">
+        <div class="imgBox"><img src="img/หน้า Menu/บิงซู.jpg" class="shopImg"></div>
+        <h3>ร้านบิงซู</h3>
+      </div>
+    </div>
+  </main>
+
+<script>
+// --- ส่วนจัดการ User (เหมือนเดิม) ---
+let user = localStorage.getItem('user');
+const userLabel = document.getElementById('userLabel');
+const loginBtn = document.getElementById('loginBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+
+if(user) {
+  userLabel.innerText = "User: " + user; // แสดงเบอร์
+  userLabel.classList.remove('hidden');
+  loginBtn.classList.add('hidden');
+  logoutBtn.classList.remove('hidden');
+} else {
+  loginBtn.classList.remove('hidden');
+  logoutBtn.classList.add('hidden');
+}
+
+function doLogout(){
+  localStorage.removeItem('user');
+  alert('ออกจากระบบสำเร็จ');
+  location.href = 'index.html';
+}
+
+function openShop(shop){
+  const user = localStorage.getItem('user');
+  
+  if(!user) {
+    alert('กรุณาเข้าสู่ระบบก่อนเลือกซื้อสินค้า');
+    location.href = 'login.html'; // ดีดไปหน้า Login ทันที
+    return; // หยุดการทำงาน ไม่ให้ไปต่อ
+  }
+  localStorage.removeItem('cart');
+  localStorage.setItem('currentShop', shop);
+  location.href = 'menu.html?shop=' + shop;
+}
+
+// --- ส่วน Banner ---
+const adData = [
+    { title: 'ตำปูปลาร้า', description: 'ร้านส้มตำ', img: 'somtum/ตำปูปลาร้า.webp', shop: 'somtum' },
+    { title: 'กะเพราหมูกรอบ', description: 'ร้านตามสั่ง', img: 'ตามสั่ง/กะเพราหมูกรอบ.jpg', shop: 'tamsang' },
+    { title: 'เย็นตาโฟ', description: 'ร้านก๋วยเตี๋ยว', img: 'noodle/เย็นตาโฟ.jpg', shop: 'noodle' },
+    { title: 'ไก่ทอด', description: 'ร้านไก่ทอด', img: 'friedchicken/น่องไก่.webp', shop: 'friedchicken' },
+    { title: 'บิงซู มัจฉะ', description: 'ร้านบิงซู', img: 'dessert/มัจฉะ.jpg', shop: 'dessert' },
+];
+
+const slidesContainer = document.getElementById('adSlides');
+
+// 1. สร้าง Slide ตามข้อมูลปกติ
+adData.forEach(data => {
+    createSlideItem(data);
+});
+
+// 2. [สำคัญ] โคลน Slide ตัวแรก ไปแปะไว้ท้ายสุด (เพื่อทำภาพลวงตาตอนวนลูป)
+const firstClone = adData[0];
+createSlideItem(firstClone, true); // true คือบอกว่าเป็นตัว Clone
+
+function createSlideItem(data, isClone = false) {
+    const item = document.createElement('div');
+    item.className = 'adItem';
+    
+    // ❌ ลบบรรทัดนี้ออกครับ (ที่เป็นตัวปัญหาทำให้กดได้ทั้งแถบ)
+    // item.onclick = () => openShop(data.shop);
+
+    // ✅ ย้าย onclick มาใส่ใน div class="adCallToAction" แทน
+    item.innerHTML = `
+        <img src="img/${data.img}" alt="${data.title}">
+        <div style="flex-grow:1">
+            <h4>${data.title}</h4>
+            <p>${data.description}</p>
+        </div>
+        <div class="adCallToAction" onclick="openShop('${data.shop}')">สั่งเลย</div>
+    `;
+    
+    if(isClone) item.id = 'first-clone';
+    slidesContainer.appendChild(item);
+}
+
+let currentSlide = 0;
+const totalSlides = adData.length; // จำนวนรูปจริง (5 รูป)
+
+function updateSlide(){
+    const offset = -currentSlide * 100;
+    slidesContainer.style.transform = `translateX(${offset}%)`;
+}
+
+function nextSlide() {
+    // ถ้าตอนนี้อยู่ที่รูปสุดท้าย (ก่อนจะไปตัว Clone)
+    if (currentSlide >= totalSlides) {
+        return; // ป้องกันการกดรัวๆ
+    }
+
+    currentSlide++;
+    slidesContainer.classList.remove('no-transition'); // เปิด Animation
+    updateSlide();
+
+    // เช็คว่า ถ้าเราเลื่อนมาถึงตัว Clone (index = 5) แล้ว
+    if (currentSlide === totalSlides) {
+        // รอให้ Animation เลื่อนเสร็จก่อน (0.5 วินาที ตามที่ตั้งใน CSS)
+        setTimeout(() => {
+            // 1. ปิด Animation ชั่วคราว
+            slidesContainer.classList.add('no-transition');
+            
+            // 2. วาร์ปกลับไปที่รูปแรก (Index 0) ทันที
+            currentSlide = 0;
+            updateSlide();
+            
+        }, 500); // 500ms ต้องตรงกับ transition ใน CSS (0.5s)
+    }
+}
+
+function prevSlide() {
+    if (currentSlide <= 0) {
+        // ถ้าอยู่รูปแรกแล้วกดถอยหลัง -> ให้วาร์ปไปที่ตัว Clone ก่อน
+        slidesContainer.classList.add('no-transition');
+        currentSlide = totalSlides; 
+        updateSlide();
+
+        // รอเสี้ยววินาทีเพื่อให้ Browser รับรู้การย้ายตำแหน่ง แล้วค่อยเลื่อนจริง
+        setTimeout(() => {
+            slidesContainer.classList.remove('no-transition');
+            currentSlide--;
+            updateSlide();
+        }, 20);
+    } else {
+        slidesContainer.classList.remove('no-transition');
+        currentSlide--;
+        updateSlide();
+    }
+}
+
+// ตั้งเวลาเลื่อนอัตโนมัติ (4 วินาที)
+setInterval(nextSlide, 4000);
+
+// --- ส่วน Search Engine (ใหม่) ---
+// รวมเมนูทั้งหมดไว้ที่นี่เพื่อใช้ค้นหา
+const allMenus = [
+  { name: 'ตำไทย', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
+  { name: 'ตำปูปลาร้า', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
+  { name: 'คอหมูย่าง', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
+  
+  { name: 'ข้าวผัดกะเพราหมูกรอบ', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
+  { name: 'ข้าวผัดหมูสับ', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
+  { name: 'ผัดซีอิ๊วหมู', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
+  { name: 'ผัดมาม่า', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
+
+  { name: 'บะหมี่น้ำหมูแดง', shop: 'noodle', shopTH: 'ร้านก๋วยเตี๋ยว' },
+  { name: 'เย็นตาโฟ', shop: 'noodle', shopTH: 'ร้านก๋วยเตี๋ยว' },
+  { name: 'ก๋วยเตี๋ยวเรือ', shop: 'noodle', shopTH: 'ร้านก๋วยเตี๋ยว' },
+  
+  { name: 'น่องไก่ทอด', shop: 'friedchicken', shopTH: 'ร้านไก่ทอด' },
+  { name: 'นักเก็ตไก่', shop: 'friedchicken', shopTH: 'ร้านไก่ทอด' },
+  
+  { name: 'บิงซู นมสด', shop: 'dessert', shopTH: 'ร้านบิงซู' },
+  { name: 'บิงซู มัจฉะ', shop: 'dessert', shopTH: 'ร้านบิงซู' },
+  { name: 'บิงซู โอวัลติน', shop: 'dessert', shopTH: 'ร้านบิงซู' },
+];
+
+function doSearch() {
+  const query = document.getElementById('searchInput').value.trim();
+  const resultsBox = document.getElementById('searchResults');
+  
+  // ถ้าไม่มีข้อความ ให้ซ่อนกล่องผลลัพธ์
+  if(query === '') {
+    resultsBox.style.display = 'none';
+    return;
+  }
+
+  // กรองเมนู (Filter) ที่มีคำค้นหาอยู่
+  const found = allMenus.filter(item => item.name.includes(query));
+
+  if(found.length > 0) {
+    let html = '';
+    found.forEach(item => {
+      html += `
+        <div class="search-item" onclick="openShop('${item.shop}')">
+          <span>${item.name}</span>
+          <span style="color:#888; font-size:0.9em">${item.shopTH}</span>
+        </div>
+      `;
+    });
+    resultsBox.innerHTML = html;
+    resultsBox.style.display = 'block';
+  } else {
+    resultsBox.innerHTML = '<div class="search-item" style="cursor:default">ไม่พบเมนูนี้</div>';
+    resultsBox.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+/* =========================================
+   1. IMPORT FONTS & VARIABLES
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sarabun:wght@300;400;500;600&display=swap');
+
+:root {
+  --accent: #FFB84C; /* สีเหลืองทอง */
+  --bg: #ffffff;
+  --muted: #666;
+  --card-shadow: rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+
+/* =========================================
+   2. BASIC RESET & BODY
+   ========================================= */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Sarabun', sans-serif;
+  color: #222;
+  -webkit-font-smoothing: antialiased;
+  
+  /* Background Image */
+  background-image: url('img/bg.jpg'); /* เปลี่ยน URL ตามรูปจริง */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-color: var(--bg);
+}
+
+main {
+  padding-top: 80px; /* เว้นระยะเผื่อ Topbar */
+}
+
+/* =========================================
+   3. LAYOUT CONTAINERS
+   ========================================= */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  background: #ffffff;
+  border-radius: var(--radius);
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  min-height: calc(100vh - 80px);
+}
+
+.wide-container {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 4.3%;
+  padding: 20px 16px;
+  background: #ffffff;
+  border-radius: var(--radius);
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  min-height: calc(100vh - 80px);
+  text-align: center; /* ส่วนใหญ่หน้า wide ใช้ center */
+}
+
+/* =========================================
+   4. TOPBAR & NAVIGATION
+   ========================================= */
+.topbar {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; <-- ลบออกเพราะเราใช้ margin-auto ดัน search */
+  padding: 12px 50px;
+  border-bottom: 1px solid #f3f3f3;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #B33939; /* สีแดงเข้ม */
+  color: #FFFFFF;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 64px;
+}
+
+.topbar .brand {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin-right: auto; 
+}
+.top-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* --- Search Bar on Topbar --- */
+.search-wrapper {
+  margin-left: auto;   /* ดันตัวเองไปทางขวา */
+  margin-right: 300px;  /* เว้นห่างจากปุ่ม Login */
+  width: 300px;        /* ความกว้างช่องค้นหา */
+  position: relative;  
+}
+
+.top-search-input {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.top-search-input:focus {
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.5);
+}
+
+.search-results-dropdown {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 1000;
+  overflow: hidden;
+  display: none;
+  color: #333;
+}
+
+.search-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  text-align: left;
+}
+
+.search-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* =========================================
+   5. COMPONENTS (Buttons, Inputs, Cards)
+   ========================================= */
+.btn {
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #222;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn:hover { filter: brightness(0.95); }
+
+.btn.small { padding: 6px 12px; font-size: 0.9rem; }
+.btn.ghost { background: transparent; border: 1px solid #eee; }
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  outline: none;
+}
+input:focus, textarea:focus { border-color: var(--accent); }
+
+.hidden { display: none !important; }
+.smallBtn { padding: 4px 10px; border-radius: 6px; border: 1px solid #ddd; background:#fff; cursor:pointer; font-weight:700; }
+
+/* =========================================
+   6. SHOP GRID & CARDS (Index Page)
+   ========================================= */
+.shopGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.shopCard {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 6px 18px var(--card-shadow);
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.shopCard:hover { transform: translateY(-4px); }
+.shopCard h3 { margin: 8px 0 4px; font-size: 1.1rem; }
+
+.imgBox {
+  height: 120px;
+  background: #f2f2f2;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.shopImg { width: 100%; height: 100%; object-fit: cover; }
+
+/* =========================================
+   7. BANNER & SLIDER
+   ========================================= */
+.adBanner {
+  margin-top: 70px;    /* ระยะห่างจากด้านบน */
+  margin-bottom: 20px;
+  height: 180px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: relative;
+  background: #fff;
+}
+
+.adSlides {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* คลาสสำหรับปิด Animation ตอนวนลูป */
+.no-transition { transition: none !important; }
+
+.adItem {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.adItem img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.adItem h4 { margin: 0 0 5px 0; font-size: 1.5em; color: #333; }
+.adItem p { margin: 0; color: var(--muted); }
+
+.adCallToAction {
+  background: var(--accent);
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Navigation Buttons for Banner */
+.adBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  border: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  font-size: 20px; color: #333;
+  cursor: pointer; z-index: 10;
+  transition: 0.2s;
+}
+.adBtn:hover { background: rgba(255,255,255,1); transform: translateY(-50%) scale(1.1); }
+.adPrev { left: 10px; }
+.adNext { right: 10px; }
+
+/* =========================================
+   8. MENU PAGE LAYOUT
+   ========================================= */
+.menuLayout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 18px;
+  align-items: start;
+}
+@media(max-width: 940px){
+  .menuLayout { grid-template-columns: 1fr; }
+  .summaryColumn { order: 2; }
+  .menuColumn { order: 1; }
+}
+
+.menuCard {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 10px var(--card-shadow);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.menuCard .imgBox { width: 96px; height: 80px; flex-shrink: 0; margin-bottom: 0; }
+.menuImg { width: 100%; height: 100%; object-fit: cover; }
+
+.menuInfo { width: 100%; }
+.menuInfo > div:first-child { display: flex; justify-content: space-between; margin-bottom: 8px; }
+
+.qtyRow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.qtyRow .btn.small { margin-left: auto; } /* ดันปุ่มเพิ่มไปขวาสุด */
+
+/* Summary (Menu Page) */
+.summaryColumn { position: relative; }
+.summaryCard {
+  position: sticky;
+  top: 80px; /* เกาะติดด้านบนเวลาเลื่อน */
+  background: var(--bg);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+#orderSummary {
+  max-height: 300px;
+  overflow: auto;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.tick { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+.tick input { width: 16px; height: 16px; margin: 0; }
+
+.summaryFooter { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed #ddd; }
+.totalLine { font-weight: 700; font-size: 1.2rem; text-align: right; }
+
+/* =========================================
+   9. PAYMENT & WAITING PAGES
+   ========================================= */
+h2 { margin-bottom: 1.5rem; color: #333; }
+
+#summaryBox {
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  background: #fafafa;
+  text-align: left;
+}
+
+.queueCard {
+  text-align: center;
+  padding: 30px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+#queueNumber { font-size: 4rem; margin: 10px 0; color: var(--accent); line-height: 1; }
+#queueStatus { font-size: 1.1rem; color: var(--muted); }
