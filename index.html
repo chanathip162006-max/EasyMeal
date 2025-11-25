@@ -55,7 +55,7 @@
         <div class="imgBox"><img src="img/หน้า Menu/บิงซู.jpg" class="shopImg"></div>
         <h3>ร้านบิงซู</h3>
       </div>
-    </div>
+    </div>  
   </main>
 
 <script>
@@ -83,7 +83,7 @@ function doLogout(){
 
 function openShop(shop){
   const user = localStorage.getItem('user');
-  
+
   localStorage.removeItem('cart');
   localStorage.setItem('currentShop', shop);
   location.href = 'menu.html?shop=' + shop;
@@ -189,25 +189,31 @@ setInterval(nextSlide, 4000);
 // --- ส่วน Search Engine (ใหม่) ---
 // รวมเมนูทั้งหมดไว้ที่นี่เพื่อใช้ค้นหา
 const allMenus = [
-  { name: 'ตำไทย', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
-  { name: 'ตำปูปลาร้า', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
+  { name: 'ส้มตำไทย', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
+  { name: 'ส้มตำปูปลาร้า', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
   { name: 'คอหมูย่าง', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
+  { name: 'ข้าวเหนียว', shop: 'somtum', shopTH: 'ร้านส้มตำ' },
   
   { name: 'ข้าวผัดกะเพราหมูกรอบ', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
   { name: 'ข้าวผัดหมูสับ', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
   { name: 'ผัดซีอิ๊วหมู', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
   { name: 'ผัดมาม่า', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
+  { name: 'ไข่ดาว', shop: 'tamsang', shopTH: 'ร้านตามสั่ง' },
 
   { name: 'บะหมี่น้ำหมูแดง', shop: 'noodle', shopTH: 'ร้านก๋วยเตี๋ยว' },
   { name: 'เย็นตาโฟ', shop: 'noodle', shopTH: 'ร้านก๋วยเตี๋ยว' },
   { name: 'ก๋วยเตี๋ยวเรือ', shop: 'noodle', shopTH: 'ร้านก๋วยเตี๋ยว' },
+  { name: 'เกาเหลา', shop: 'noodle', shopTH: 'ร้านก๋วยเตี๋ยว' },
   
   { name: 'น่องไก่ทอด', shop: 'friedchicken', shopTH: 'ร้านไก่ทอด' },
   { name: 'นักเก็ตไก่', shop: 'friedchicken', shopTH: 'ร้านไก่ทอด' },
+  { name: 'ปีกไก่ทอด', shop: 'friedchicken', shopTH: 'ร้านไก่ทอด' },
+  { name: 'ข้าวเหนียว', shop: 'friedchicken', shopTH: 'ร้านไก่ทอด' },
   
   { name: 'บิงซู นมสด', shop: 'dessert', shopTH: 'ร้านบิงซู' },
   { name: 'บิงซู มัจฉะ', shop: 'dessert', shopTH: 'ร้านบิงซู' },
   { name: 'บิงซู โอวัลติน', shop: 'dessert', shopTH: 'ร้านบิงซู' },
+  { name: 'บิงซู สตรอเบอร์รี่', shop: 'dessert', shopTH: 'ร้านบิงซู' },
 ];
 
 function doSearch() {
